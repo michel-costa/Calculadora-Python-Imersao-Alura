@@ -77,6 +77,17 @@ def home() -> Dict[str, Any]:
         "docs": "/docs"
     }
 
+@app.get("/api/f1/health")
+def health_check() -> Dict[str, Any]:
+    """Endpoint de verificação de integridade e telemetria básica."""
+    return {
+        "status": "online",
+        "backend": "FastAPI v0.110 (Python 3.10 Engine)",
+        "circuito": "Autódromo José Carlos Pace (Interlagos - GP do Brasil)",
+        "metodologia": "GCCD (Governança, Cálculo, Conferência, Demonstração 3D)",
+        "docs": "/docs"
+    }
+
 @app.post("/api/f1/calculate/downforce")
 def calcular_downforce(dados: AerodinamicaRequest) -> Dict[str, Any]:
     """

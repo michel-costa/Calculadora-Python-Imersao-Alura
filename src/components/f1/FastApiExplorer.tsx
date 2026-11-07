@@ -13,6 +13,7 @@ import {
   FileCode2,
   Activity
 } from 'lucide-react';
+import { FASTAPI_BACKEND_CODE } from '../../data/fastApiCode';
 
 export const FastApiExplorer: React.FC = () => {
   const [selectedEndpoint, setSelectedEndpoint] = useState<string>('/api/f1/calculate/downforce');
@@ -106,72 +107,7 @@ export const FastApiExplorer: React.FC = () => {
     }
   };
 
-  const pythonFastApiCode = `# ==============================================================================
-# FASTAPI BACKEND - TELEMETRIA CIENTÍFICA F1 (GP DO BRASIL / INTERLAGOS)
-# ==============================================================================
-# Instalação: pip install fastapi uvicorn pydantic
-# Execução:   uvicorn main:app --reload --port 8000
-
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
-from typing import Dict, Any, List
-
-app = FastAPI(
-    title="F1 GP do Brasil - Telemetria & Engenharia Científica",
-    description="API com metodologia GCCD para cálculos em Interlagos",
-    version="1.0.0"
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# ------------------------------------------------------------------------------
-# MODELO PYDANTIC (FASE G: GOVERNANÇA DE DADOS)
-# ------------------------------------------------------------------------------
-class AerodinamicaInput(BaseModel):
-    velocidade_kmh: float = Field(..., ge=0, le=400, description="Velocidade (km/h)")
-    area_asa_m2: float = Field(1.5, ge=0.5, le=3.0)
-    coeficiente_downforce_cl: float = Field(3.5, ge=1.0, le=6.0)
-    coeficiente_arrasto_cd: float = Field(0.9, ge=0.2, le=2.0)
-    densidade_ar: float = Field(1.18, description="Densidade em Interlagos (kg/m³)")
-
-# ------------------------------------------------------------------------------
-# ENDPOINT DE CÁLCULO AERODINÂMICO (FASES C & C: CÁLCULO E CONFERÊNCIA)
-# ------------------------------------------------------------------------------
-@app.post("/api/f1/calculate/downforce")
-def calcular_downforce(dados: AerodinamicaInput) -> Dict[str, Any]:
-    v_ms = dados.velocidade_kmh / 3.6
-    q = 0.5 * dados.densidade_ar * (v_ms ** 2)
-    downforce_n = q * dados.coeficiente_downforce_cl * dados.area_asa_m2
-    arrasto_n = q * dados.coeficiente_arrasto_cd * dados.area_asa_m2
-    peso_adicional_kg = downforce_n / 9.80665
-    eficiencia = dados.coeficiente_downforce_cl / dados.coeficiente_arrasto_cd
-
-    return {
-        "metodologia_gccd": {
-            "fase_g_governanca": "Validação de fronteira física aprovada",
-            "fase_c1_calculo": f"Pressão dinâmica q = {q:.2f} Pa",
-            "fase_c2_conferencia": f"Razão L/D = {eficiencia:.2f} consistente",
-            "fase_d_demonstracao_3d": {
-                "amplitude_vetor_pressao": min(5.0, peso_adicional_kg / 300)
-            }
-        },
-        "resultados": {
-            "downforce_newtons": round(downforce_n, 1),
-            "downforce_kg": round(peso_adicional_kg, 1),
-            "arrasto_newtons": round(arrasto_n, 1),
-            "eficiencia_l_d": round(eficiencia, 2)
-        }
-    }
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)`;
+  const pythonFastApiCode = FASTAPI_BACKEND_CODE;
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(pythonFastApiCode);
