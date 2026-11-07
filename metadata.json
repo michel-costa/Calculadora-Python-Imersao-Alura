@@ -1,0 +1,6 @@
+{
+  "name": "F1 GP do Brasil - Telemetria & Engenharia Interlagos",
+  "description": "Laboratório científico de telemetria da Fórmula 1 no Autódromo de Interlagos com metodologia GCCD, modelos 3D interativos e backend FastAPI.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
